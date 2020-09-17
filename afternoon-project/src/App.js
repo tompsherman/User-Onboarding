@@ -26,6 +26,19 @@ function App() {
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
 
+ const postNewUser = newUser => {axios
+ .post("https://reqres.in/api/users")
+ .then(response => {
+   console.log(response)
+   console.log(response.data)
+   setUsers([...users, response.data])
+   console.log(users)
+   setFormValues(initialFormValues)
+ })
+ .catch(err=>{
+   console.log("AXIOS POST ERROR!!!")
+ })
+ }
   const validate = (name, value) => {
     yup
       .reach(schema, name)
