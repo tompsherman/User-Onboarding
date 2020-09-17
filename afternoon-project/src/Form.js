@@ -9,7 +9,8 @@ function Form(props){
     const {
         values,
         submit,
-        change
+        change,
+        errors
     } = props
 
 const onSubmit = ((event)=>{
@@ -28,6 +29,16 @@ const onChange = ((event)=>{
     return (
     <>
     <form onSubmit={onSubmit}>
+    <div>    
+    <h1>New user form</h1>
+    <button>submit</button>
+        <div className="errors">
+            <div>{errors.name}</div>
+            <div>{errors.email}</div>
+            <div>{errors.password}</div>
+            <div>{errors.termsOfService}</div>
+        </div>
+    </div>
         <input 
             name="name"
             type="text"
@@ -58,7 +69,7 @@ const onChange = ((event)=>{
                 
             />
         </label>
-        <button>submit</button>
+       
     </form>
     </>
     )

@@ -1,57 +1,78 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Form from "./Form"
-import User from "./User"
-import * as yup from "yup"
-import schema from "./formSchema"
-import axios from "axios"
+import React, { useState } from "react";
+import cuid from "cuid";
+import "./App.css";
+import Form from "./Form";
+import User from "./User";
+import * as yup from "yup";
+import schema from "./formSchema.js";
+import axios from "axios";
 
-const initialFormValues = ({
+const initialFormValues = {
   name: "",
   email: "",
   password: "",
-  termsOfService: false
-})
+  termsOfService: false,
+};
 
-const initialUsers = []
+const initialFormErrors = {
+  name: "",
+  password: "",
+};
+
+const initialUsers = [];
 
 function App() {
-  const [users, setUsers] = useState(initialUsers)
-const [formValues, setFormValues] = useState(initialFormValues)
+  const [users, setUsers] = useState(initialUsers);
+  const [formValues, setFormValues] = useState(initialFormValues);
+  const [formErrors, setFormErrors] = useState(initialFormErrors);
 
-const inputChange = ((name, value)=>{
-  setFormValues({
-    ...formValues, [name]: value
-  })
-})
+  const validate = (name, value) => {
+    yup
+      .reach(schema, name)
+      .validate(value)
+      .then((valid) => {
+        setFormErrors({
+          ...formErrors,
+          [name]: "",
+        });
+      })
+      .catch((err) => {
+        setFormValues({
+          ...formErrors,
+          [name]: err.errors[0]
+        });
+      });
+  };
 
-const formSubmit = (()=>{
-  const newUser = {
-    name: formValues.name.trim(),
-    email: formValues.email.trim(),
-    password: formValues.password.trim(),
-    termsOfService: formValues.termsOfService
-  }
-  setUsers([...users, newUser])
-  setFormValues(initialFormValues)
-})
+  const inputChange = (name, value) => {
+    validate(name, value);
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+
+  const formSubmit = () => {
+    const newUser = {
+      name: formValues.name.trim(),
+      email: formValues.email.trim(),
+      password: formValues.password.trim(),
+      termsOfService: formValues.termsOfService,
+    };
+    setUsers([...users, newUser]);
+    setFormValues(initialFormValues);
+  };
 
   return (
     <div className="App">
-      <h1>New user form</h1>
+      
       <Form 
-       values={formValues}
-       change={inputChange}
-       submit={formSubmit}
-      />
-      {
-        users.map((details) => {
-          return (
-            <User details = {details}/>
-          )
-        })
-      }
+        values={formValues} 
+        change={inputChange} submit={formSubmit}
+        errors={formErrors} />
+      {users.map((details) => {
+        return <User key={cuid()} details={details} />;
+      })}
     </div>
   );
 }
