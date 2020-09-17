@@ -50,7 +50,7 @@ function App() {
         });
       })
       .catch((err) => {
-        setFormValues({
+        setFormErrors({
           ...formErrors,
           [name]: err.errors[0]
         });
