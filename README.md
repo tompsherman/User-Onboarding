@@ -23,8 +23,8 @@ We want to create a form to onboard a new user to our system. We need _at least_
 - [x] Name
 - [x] Email
 - [x] Password
-- [ ] Terms of Service (checkbox)
-- [ ] A Submit button to send our form data to the server.
+- [x] Terms of Service (checkbox)
+- [x] A Submit button to send our form data to the server.
 
 #### Implement Form Validation and Error Messaging
 
